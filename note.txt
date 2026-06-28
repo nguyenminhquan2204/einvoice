@@ -1,0 +1,3 @@
+nx lint invoice
+nx test invoice
+nx run invoice:serve

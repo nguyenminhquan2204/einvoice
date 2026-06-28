@@ -13,7 +13,9 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "paths": {}
+    "paths": {
+      "@common/constants/*": ["./libs/constants/src/lib/*"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
