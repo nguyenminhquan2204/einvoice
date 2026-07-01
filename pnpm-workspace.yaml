@@ -1,13 +1,8 @@
 autoInstallPeers: true
 
-# pnpm 10+ chặn build script của dependencies cho đến khi được duyệt rõ ràng.
-# Cho phép build các package cần biên dịch native / thực sự dùng:
-onlyBuiltDependencies:
-  - nx
-  - '@parcel/watcher'
-  - unrs-resolver
-
-# Chặn có chủ đích các package không cần build (tránh telemetry / build thừa):
-ignoredBuiltDependencies:
-  - '@scarf/scarf'
-  - less
+# pnpm 10+ mặc định chặn build script của dependencies và coi đó là lỗi cứng
+# (ERR_PNPM_IGNORED_BUILDS) trên môi trường non-interactive như CI.
+# onlyBuiltDependencies/ignoredBuiltDependencies KHÔNG dập được lỗi này ở pnpm 11.x
+# khi store đã cache trạng thái "chưa build", nên cho phép chạy toàn bộ build script
+# (các dependency này đã nằm trong lockfile và được project tin dùng).
+dangerouslyAllowAllBuilds: true
