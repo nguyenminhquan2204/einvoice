@@ -1,3 +1,13 @@
 autoInstallPeers: true
-allowBuilds:
-  nx: true
+
+# pnpm 10+ chặn build script của dependencies cho đến khi được duyệt rõ ràng.
+# Cho phép build các package cần biên dịch native / thực sự dùng:
+onlyBuiltDependencies:
+  - nx
+  - '@parcel/watcher'
+  - unrs-resolver
+
+# Chặn có chủ đích các package không cần build (tránh telemetry / build thừa):
+ignoredBuiltDependencies:
+  - '@scarf/scarf'
+  - less
