@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class ResponseDto<T> {
   @ApiProperty({ type: String })
-  message = HTTP_MESSAGE.OK;
+  message: HTTP_MESSAGE | string = HTTP_MESSAGE.OK;
 
   @ApiProperty()
   data?: T;

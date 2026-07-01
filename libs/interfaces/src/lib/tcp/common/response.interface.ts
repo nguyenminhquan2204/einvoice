@@ -2,7 +2,7 @@ import { HTTP_MESSAGE } from '@common/constants/enum/http-message.enum';
 import { HttpStatus } from '@nestjs/common';
 
 export class Response<T> {
-  message: string;
+  message: HTTP_MESSAGE | string = HTTP_MESSAGE.OK;
   data?: T;
   error?: string;
   statusCode?: number;
