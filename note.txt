@@ -4,15 +4,15 @@ nx run invoice:serve
 
 
 -------Library-------------
-1. pnpm add -D husky
-2. pnpm add -D lint-staged
-3. pnpm add -D @commitlint/cli @commitlint/config-conventional
-4. pnpm add @nestjs/config
-5. pnpm add class-validator class-transformer
-6. pnpm add @nestjs/swagger
-7. pnpm add express
-8. pnpm add -D @types/express
-9. pnpm add uuid
+01. pnpm add -D husky
+02. pnpm add -D lint-staged
+03. pnpm add -D @commitlint/cli @commitlint/config-conventional
+04. pnpm add @nestjs/config
+05. pnpm add class-validator class-transformer
+06. pnpm add @nestjs/swagger
+07. pnpm add express
+08. pnpm add -D @types/express
+09. pnpm add uuid
 10. pnpm add @nestjs/microservices
 ---------------------------
 
@@ -26,3 +26,7 @@ echo "npx --no -- commitlint --edit \$1" > .husky/commit-msg
 ----Port-----------
 lsof -nP -iTCP:2204 -sTCP:LISTEN
 kill -9 $(lsof -t -iTCP:2204 -sTCP:LISTEN)
+
+
+-----Note-------
+ 

@@ -13,6 +13,7 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "strictPropertyInitialization": false,
     "paths": {
       "@common/constants/*": ["./libs/constants/src/lib/*"],
       "@common/configuration/*": ["./libs/configuration/src/lib/*"],
