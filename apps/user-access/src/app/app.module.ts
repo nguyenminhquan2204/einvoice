@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TConfiguration, CONFIGURATION } from '../configuration';
 import { ConfigModule } from '@nestjs/config';
-import { RoleModule } from './role/role.module';
+import { RoleModule } from './modules/role/role.module';
 import { MongoProvider } from '@common/configuration/mongo.config';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { MongoProvider } from '@common/configuration/mongo.config';
     }),
     MongoProvider,
     RoleModule,
+    UserModule,
   ],
 })
 export class AppModule {
