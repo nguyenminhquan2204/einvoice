@@ -1,0 +1,44 @@
+{
+  "collection": "roles",
+  "data": [
+    {
+      "name": "administrator",
+      "description": "Admin role with all permissions",
+      "permissions": [
+        "invoice.create",
+        "invoice.get_by_id",
+        "invoice.get_all",
+        "invoice.update",
+        "invoice.delete",
+        "invoice.send",
+        "user.create",
+        "user.get_by_id",
+        "user.get_all",
+        "user.update",
+        "user.delete",
+        "role.create",
+        "role.get_by_id",
+        "role.get_all",
+        "role.update",
+        "role.delete",
+        "product.create",
+        "product.get_by_id",
+        "product.get_all",
+        "product.update",
+        "product.delete"
+      ]
+    },
+    {
+      "name": "accountant",
+      "description": "Accountant role with user permissions",
+      "permissions": [
+        "invoice.get_by_id",
+        "invoice.get_all",
+        "user.get_by_id",
+        "role.get_by_id",
+        "product.get_by_id",
+        "product.get_all"
+      ]
+    }
+  ]
+}
