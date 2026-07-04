@@ -7,7 +7,7 @@
     "nx:reset": "nx reset",
     "nx:run-many": "nx run-many",
     "dev": "pnpm nx:reset && pnpm nx:run-many -t serve",
-    "dev-lite": "pnpm dev --projects=bff"
+    "dev-lite": "pnpm dev --projects=bff,user-access,authorizer"
   },
   "private": true,
   "dependencies": {
@@ -19,7 +19,7 @@
     "@nestjs/platform-express": "^11.0.0",
     "@nestjs/swagger": "^11.4.4",
     "@nestjs/typeorm": "^11.0.3",
-    "axios": "^1.6.0",
+    "axios": "^1.16.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "express": "^5.2.1",

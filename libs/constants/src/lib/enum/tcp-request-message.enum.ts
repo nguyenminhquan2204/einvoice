@@ -16,8 +16,13 @@ enum USER {
   GET_ALL = 'user.get_all',
 }
 
+enum KEYCLOAK {
+  CREATE_USER = 'keycloack.create_user',
+}
+
 export const TCP_REQUEST_MESSAGE = {
   INVOICE,
   PRODUCT,
   USER,
+  KEYCLOAK,
 };
