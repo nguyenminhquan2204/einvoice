@@ -20,9 +20,14 @@ enum KEYCLOAK {
   CREATE_USER = 'keycloack.create_user',
 }
 
+enum AUTHORIZER {
+  LOGIN = 'authorizer.login',
+}
+
 export const TCP_REQUEST_MESSAGE = {
   INVOICE,
   PRODUCT,
   USER,
   KEYCLOAK,
+  AUTHORIZER,
 };

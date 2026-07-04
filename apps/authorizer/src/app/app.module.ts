@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TConfiguration, CONFIGURATION } from '../configuration';
 import { ConfigModule } from '@nestjs/config';
 import { KeycloakModule } from './modules/keycloak/keycloak.module';
+import { AuthorizerModule } from './modules/authorizer/authorizer.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { KeycloakModule } from './modules/keycloak/keycloak.module';
       load: [() => CONFIGURATION],
     }),
     KeycloakModule,
+    AuthorizerModule,
   ],
 })
 export class AppModule {

@@ -1,7 +1,11 @@
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios, { AxiosInstance } from 'axios';
-import { CreateKeycloakUserRequest, ExchangeClientTokenResponse } from '@common/interfaces/common';
+import {
+  CreateKeycloakUserRequest,
+  ExchangeClientTokenResponse,
+  ExchangeUserTokenResponse,
+} from '@common/interfaces/common';
 
 @Injectable()
 export class KeycloakHttpService {
@@ -65,5 +69,23 @@ export class KeycloakHttpService {
     this.logger.debug(`Created user with id: `, userId);
 
     return userId;
+  }
+
+  async exchangeUserToken(payload: { username: string; password: string }): Promise<ExchangeUserTokenResponse> {
+    const body = new URLSearchParams();
+    body.append('client_id', this.clientId);
+    body.append('client_secret', this.clientSecret);
+    body.append('grant_type', 'password');
+    body.append('scope', 'openid');
+    body.append('username', payload.username);
+    body.append('password', payload.password);
+
+    const { data } = await this.axiosInstance.post(`/realms/${this.realm}/protocol/openid-connect/token`, body, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+
+    return data;
   }
 }

@@ -5,7 +5,7 @@ import { KeycloakHttpService } from './services/keycloak-http.service';
 @Module({
   imports: [],
   controllers: [KeycloakController],
-  exports: [],
+  exports: [KeycloakHttpService],
   providers: [KeycloakHttpService],
 })
 export class KeycloakModule {}
