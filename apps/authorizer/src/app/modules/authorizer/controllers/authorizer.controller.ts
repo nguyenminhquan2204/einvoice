@@ -21,7 +21,7 @@ export class AuthorizerController {
 
   @MessagePattern(TCP_REQUEST_MESSAGE.AUTHORIZER.VERIFY_TOKEN_USER)
   async verifyUserToken(@ProcessId() processId: string, @RequestParams() token: string) {
-    const result = await this.authorizerService.verifyUserToken(token);
+    const result = await this.authorizerService.verifyUserToken(processId, token);
     return Response.success<AuthorizeResponse>(result);
   }
 }

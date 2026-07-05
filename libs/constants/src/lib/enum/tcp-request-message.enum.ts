@@ -14,6 +14,7 @@ enum PRODUCT {
 enum USER {
   CREATE = 'user.create',
   GET_ALL = 'user.get_all',
+  GET_USER_BY_USER_ID = 'user.get_user_by_user_id',
 }
 
 enum KEYCLOAK {

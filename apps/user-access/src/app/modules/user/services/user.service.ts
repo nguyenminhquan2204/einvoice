@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Inject } from '@nestjs/common';
+import { BadRequestException, Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { CreateUserTcpRequest } from '@common/interfaces/tcp/user';
 import { ERROR_CODE } from '@common/constants/enum/error-code.enum';
@@ -43,5 +43,14 @@ export class UserService {
         })
         .pipe(map((data) => data.data)),
     );
+  }
+
+  async getUserByUserId(userId: string) {
+    const result = await this.userRepository.getByUserId(userId);
+    if (!result) {
+      throw new NotFoundException('User not found');
+    }
+
+    return result;
   }
 }

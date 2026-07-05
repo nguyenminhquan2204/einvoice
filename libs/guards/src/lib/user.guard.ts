@@ -8,6 +8,7 @@ import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
 import { firstValueFrom } from 'rxjs';
 import { TCP_REQUEST_MESSAGE } from '@common/constants/enum/tcp-request-message.enum';
 import { AuthorizeResponse } from '@common/interfaces/tcp/authorizer/authorizer-response.interface';
+import { setUserData } from '@common/utils/request.util';
 
 @Injectable()
 export class UserGuard implements CanActivate {
@@ -38,6 +39,8 @@ export class UserGuard implements CanActivate {
       if (!result?.valid) {
         throw new UnauthorizedException('Token invalidk');
       }
+
+      setUserData(request, result);
 
       return true;
     } catch (error) {
