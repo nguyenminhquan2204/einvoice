@@ -20,7 +20,11 @@ export class UserGuard implements CanActivate {
   ) {}
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-    const authOptions = this.reflector.get<{ secured: boolean }>(MetaDataKeys.SECURED, context.getHandler());
+    const authOptions = this.reflector.getAllAndOverride<{ secured: boolean }>(MetaDataKeys.SECURED, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    // const authOptions = this.reflector.get<{ secured: boolean }>(MetaDataKeys.SECURED, context.getHandler());
     const request = context.switchToHttp().getRequest();
 
     if (!authOptions?.secured) {

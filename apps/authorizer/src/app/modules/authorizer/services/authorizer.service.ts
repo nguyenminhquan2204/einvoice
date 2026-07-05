@@ -56,8 +56,6 @@ export class AuthorizerService {
 
       const user = await this.userValidation(processId, payload.sub!);
 
-      console.log('User: ', user);
-
       return {
         valid: true,
         metadata: {

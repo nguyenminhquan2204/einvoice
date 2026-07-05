@@ -11,6 +11,8 @@ import { map } from 'rxjs';
 import { UserData } from '@common/decorators/userData.decorator';
 import { AuthorizeMetadata } from '@common/interfaces/tcp/authorizer';
 import { Authorization } from '@common/decorators/authorizer.decorator';
+import { Permissions } from '@common/decorators/permission.decorator';
+import { PERMISSION } from '@common/constants/enum/role.enum';
 
 @ApiTags('Invoices')
 @Controller('invoices')
@@ -21,13 +23,12 @@ export class InvoiceController {
   @ApiOkResponse({ type: ResponseDto<InvoiceResponseDto> })
   @ApiOperation({ summary: 'Create a new invoice' })
   @Authorization({ secured: true })
+  @Permissions([PERMISSION.INVOICE_CREATE])
   create(
     @ProcessId() processId: string,
     @UserData() userData: AuthorizeMetadata,
     @Body() body: CreateInvoiceRequestDto,
   ) {
-    Logger.debug('User data: ', userData);
-
     return this.invoiceClient
       .send<InvoiceTcpResponse, CreateInvoiceTcpRequest>(TCP_REQUEST_MESSAGE.INVOICE.CREATE, {
         data: body,
