@@ -13,7 +13,6 @@ import { UserGuard } from '@common/guards/user.guard';
 import { ClientsModule } from '@nestjs/microservices';
 import { TCP_SERVICES, TcpProvider } from '@common/configuration/tcp.config';
 import { PermissionGuard } from '@common/guards/permission.guard';
-import { RedisProvider } from '@common/configuration/redis.config';
 
 @Module({
   imports: [
@@ -22,7 +21,6 @@ import { RedisProvider } from '@common/configuration/redis.config';
       load: [() => CONFIGURATION],
     }),
     ClientsModule.registerAsync([TcpProvider(TCP_SERVICES.AUTHORIZER_SERVICE)]),
-    RedisProvider,
     InvoiceModule,
     ProductModule,
     UserModule,
