@@ -29,8 +29,17 @@ export const RedisProvider = CacheModule.registerAsync({
     const port = configService.get('REDIS_CONFIG.PORT');
     const ttl = configService.get('REDIS_CONFIG.TTL');
 
+    const store = createKeyv({
+      url: `redis://${host}:${port}`,
+      socket: {
+        connectTimeout: 3000,
+        reconnectStrategy: (retries) => (retries > 5 ? new Error('Redis unreachable') : Math.min(retries * 200, 2000)),
+      },
+    });
+    store.on('error', (error) => console.error('[Redis] connection error:', error?.message));
+
     return {
-      stores: [createKeyv(`redis://${host}:${port}`)],
+      stores: [store],
       ttl,
     };
   },
