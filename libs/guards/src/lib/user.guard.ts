@@ -12,16 +12,25 @@ import { setUserData } from '@common/utils/request.util';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { createHash } from 'crypto';
+import { GRPC_SERVICES } from '@common/configuration/grpc.config';
+import { ClientGrpc } from '@nestjs/microservices';
+import { AuthorizerService } from '@common/interfaces/grpc/authorizer';
 
 @Injectable()
 export class UserGuard implements CanActivate {
   private readonly logger = new Logger(UserGuard.name);
+  private authorizerService: AuthorizerService;
 
   constructor(
     private readonly reflector: Reflector,
     @Inject(TCP_SERVICES.AUTHORIZER_SERVICE) private readonly authorizerClient: TcpClient,
+    @Inject(GRPC_SERVICES.AUTHORIZER_SERVICE) private readonly grpcAuthorizerClient: ClientGrpc,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
+
+  onModuleInit() {
+    this.authorizerService = this.grpcAuthorizerClient.getService<AuthorizerService>('AuthorizerService');
+  }
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const authOptions = this.reflector.getAllAndOverride<{ secured: boolean }>(MetaDataKeys.SECURED, [
@@ -54,7 +63,13 @@ export class UserGuard implements CanActivate {
         this.logger.warn(`Cache read failed, skip cache: ${error}`);
       }
 
-      const result = await this.verifyUserToken(processId, token);
+      // Tcp
+      // const result = await this.verifyUserToken(processId, token);
+
+      // Grpc
+      const response = await firstValueFrom(this.authorizerService.verifyUserToken({ processId, token }));
+      const { data: result } = response;
+
       if (!result?.valid) {
         throw new UnauthorizedException('Token invalidk');
       }
