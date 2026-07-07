@@ -10,16 +10,21 @@ import { TCP_REQUEST_MESSAGE } from '@common/constants/enum/tcp-request-message.
 import { TCP_SERVICES } from '@common/configuration/tcp.config';
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
 import { Role } from '@common/schemas/role.schema';
+import { GRPC_SERVICES } from '@common/configuration/grpc.config';
+import { ClientGrpc } from '@nestjs/microservices';
+import { UserAccessService } from '@common/interfaces/grpc/user-access';
 
 @Injectable()
 export class AuthorizerService {
   private readonly logger = new Logger(AuthorizerService.name);
+  private userAccessService: UserAccessService;
   private jwtsClient: JwksClient;
 
   constructor(
     private readonly keycloakHttpService: KeycloakHttpService,
     private readonly configService: ConfigService,
     @Inject(TCP_SERVICES.USER_ACCESS_SERVICE) private readonly userAccessClient: TcpClient,
+    @Inject(GRPC_SERVICES.USER_ACCESS_SERVICE) private readonly grpcUserAccessClient: ClientGrpc,
   ) {
     const host = configService.get('KEYCLOAK_CONFIG.HOST');
     const realm = configService.get('KEYCLOAK_CONFIG.REALM');
@@ -29,6 +34,10 @@ export class AuthorizerService {
       cache: true,
       rateLimit: true,
     });
+  }
+
+  onModuleInit() {
+    this.userAccessService = this.grpcUserAccessClient.getService<UserAccessService>('UserAccessService');
   }
 
   async login(data: LoginTcpRequest) {
@@ -72,7 +81,13 @@ export class AuthorizerService {
   }
 
   private async userValidation(processId: string, userId: string) {
-    return await this.getUserByUserId(processId, userId);
+    // TCP
+    // return await this.getUserByUserId(processId, userId);
+
+    // GRPC
+    return await firstValueFrom(
+      this.userAccessService.getUserByUserId({ processId, userId }).pipe(map((data) => data.data)),
+    );
   }
 
   private getUserByUserId(processId: string, userId: string) {

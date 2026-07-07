@@ -17,6 +17,14 @@ async function bootstrap() {
       port: AppModule.CONFIGURATION.TCP_SERV.TCP_USER_ACCESS_SERVICE.options?.port,
     },
   });
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: AppModule.CONFIGURATION.GRPC_SERV.GRPC_USER_ACCESS_SERVICE.name,
+      protoPath: AppModule.CONFIGURATION.GRPC_SERV.GRPC_USER_ACCESS_SERVICE.options.protoPath,
+      url: AppModule.CONFIGURATION.GRPC_SERV.GRPC_USER_ACCESS_SERVICE.options.url,
+    },
+  });
 
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
