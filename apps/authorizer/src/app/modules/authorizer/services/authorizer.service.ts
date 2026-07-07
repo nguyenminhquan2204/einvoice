@@ -19,7 +19,7 @@ export class AuthorizerService {
   constructor(
     private readonly keycloakHttpService: KeycloakHttpService,
     private readonly configService: ConfigService,
-    @Inject(TCP_SERVICES.USER_ACCSESS_SERVICE) private readonly userAccessClient: TcpClient,
+    @Inject(TCP_SERVICES.USER_ACCESS_SERVICE) private readonly userAccessClient: TcpClient,
   ) {
     const host = configService.get('KEYCLOAK_CONFIG.HOST');
     const realm = configService.get('KEYCLOAK_CONFIG.REALM');

@@ -13,7 +13,7 @@ import { Authorization } from '@common/decorators/authorizer.decorator';
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
-  constructor(@Inject(TCP_SERVICES.USER_ACCSESS_SERVICE) private readonly userAccessClient: TcpClient) {}
+  constructor(@Inject(TCP_SERVICES.USER_ACCESS_SERVICE) private readonly userAccessClient: TcpClient) {}
 
   @Post()
   @ApiOkResponse({ type: ResponseDto<string> })

@@ -7,7 +7,7 @@ import { TCP_SERVICES, TcpProvider } from '@common/configuration/tcp.config';
 import { AuthorizerGrpcController } from './controllers/authorizer-grpc.controller';
 
 @Module({
-  imports: [ClientsModule.registerAsync([TcpProvider(TCP_SERVICES.USER_ACCSESS_SERVICE)]), KeycloakModule],
+  imports: [ClientsModule.registerAsync([TcpProvider(TCP_SERVICES.USER_ACCESS_SERVICE)]), KeycloakModule],
   controllers: [AuthorizerController, AuthorizerGrpcController],
   exports: [],
   providers: [AuthorizerService],
