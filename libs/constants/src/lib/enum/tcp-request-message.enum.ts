@@ -4,6 +4,7 @@ enum INVOICE {
   GET_BY_ID = 'invoice.get_by_id',
   GET_ALL = 'invoice.get_all',
   DELETE_BY_ID = 'invoice.delete_by_id',
+  SEND = 'invoice.send',
 }
 
 enum PRODUCT {
@@ -26,10 +27,15 @@ enum AUTHORIZER {
   VERIFY_TOKEN_USER = 'authorizer.verify_user_token',
 }
 
+enum PDF_GENERATOR {
+  CREATE_INVOICE_PDF = 'pdf_generator.create_invoice_pdf',
+}
+
 export const TCP_REQUEST_MESSAGE = {
   INVOICE,
   PRODUCT,
   USER,
   KEYCLOAK,
   AUTHORIZER,
+  PDF_GENERATOR,
 };

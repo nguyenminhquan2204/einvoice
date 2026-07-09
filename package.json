@@ -7,7 +7,7 @@
     "nx:reset": "nx reset",
     "nx:run-many": "nx run-many",
     "dev": "pnpm nx:reset && pnpm nx:run-many -t serve",
-    "dev-lite": "pnpm dev --projects=bff,user-access,authorizer,invoice"
+    "dev-lite": "pnpm dev --projects=bff,user-access,authorizer,invoice,pdf-generator"
   },
   "private": true,
   "dependencies": {
@@ -29,12 +29,14 @@
     "cache-manager": "^7.2.9",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
+    "ejs": "^6.0.1",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "jwks-rsa": "^4.1.0",
     "mongodb": "^7.4.0",
     "mongoose": "^9.7.3",
     "pg": "^8.22.0",
+    "puppeteer": "^25.3.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.0",
     "typeorm": "^1.0.0",
@@ -56,6 +58,7 @@
     "@nx/webpack": "23.0.1",
     "@nx/workspace": "23.0.1",
     "@swc/helpers": "~0.5.18",
+    "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.6",
     "@types/jest": "~30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
