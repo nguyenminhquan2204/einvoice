@@ -9,6 +9,6 @@ export class PdfController {
   @Get()
   printPdf() {
     const templatePath = path.join(__dirname, 'templates', 'invoice.template.ejs');
-    return this.pdfService.generatePdfFromEjs(templatePath, 'quan');
+    return this.pdfService.generatePdfFromEjs(templatePath, 'data-test');
   }
 }
