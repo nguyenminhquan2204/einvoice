@@ -13,6 +13,7 @@ import { ObjectId } from 'mongodb';
 import { UploadFileTcpRequest } from '@common/interfaces/tcp/media';
 import { PaymentService } from '../../payment/services/payment.service';
 import { KafkaService } from '@common/kafka/kafka.service';
+import { InvoiceSentPayload } from '@common/interfaces/queue/invoice';
 
 @Injectable()
 export class InvoiceService {
@@ -41,6 +42,7 @@ export class InvoiceService {
     const fileUrl = await this.uploadFile(processId, { fileBase64: pdfBase64!, fileName: `invoice-${invoiceId}` });
 
     const checkoutData = await this.paymentService.createCheckoutSession(createCheckoutSessionMapping(invoice));
+    if (!checkoutData?.url) throw new BadRequestException('Create url payment failed');
 
     await this.invoiceRepository.updateById(invoiceId, {
       status: INVOICE_STATUS.SENT,
@@ -49,12 +51,10 @@ export class InvoiceService {
     });
 
     // Kafka
-    this.kafkaClient.emit('invoice-send', {
-      invoiceId,
-      clientEmail: invoice.client.email,
+    this.kafkaClient.emit<InvoiceSentPayload>('invoice-send', {
+      id: invoice.id,
+      paymentLink: checkoutData?.url,
     });
-
-    return checkoutData.url;
   }
 
   generatorInvoicePdf(processId: string, data: Invoice) {
@@ -81,5 +81,9 @@ export class InvoiceService {
 
   updateInvoicePaid(invoiceId: string) {
     return this.invoiceRepository.updateById(invoiceId, { status: INVOICE_STATUS.PAID });
+  }
+
+  getById(id: string) {
+    return this.invoiceRepository.findById(id);
   }
 }

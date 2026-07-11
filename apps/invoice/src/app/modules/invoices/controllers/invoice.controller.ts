@@ -1,4 +1,4 @@
-import { Controller, UseInterceptors } from '@nestjs/common';
+import { Controller, NotFoundException, UseInterceptors } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { TcpLoggingInterceptor } from '@common/interceptors/tcpLogging.interceptor';
 import { Response } from '@common/interfaces/tcp/common/response.interface';
@@ -25,8 +25,8 @@ export class InvoiceController {
     @ProcessId() processId: string,
     @RequestParams() params: SendInvoiceTcpRequest,
   ): Promise<Response<string>> {
-    const result = await this.invoiceService.sendById(processId, params);
-    return Response.success<string>(result as string);
+    await this.invoiceService.sendById(processId, params);
+    return Response.success<string>(HTTP_MESSAGE.OK);
   }
 
   @MessagePattern(TCP_REQUEST_MESSAGE.INVOICE.UPDATE_INVOICE_PAID)
@@ -36,5 +36,12 @@ export class InvoiceController {
   ): Promise<Response<string>> {
     await this.invoiceService.updateInvoicePaid(invoiceId);
     return Response.success<string>(HTTP_MESSAGE.UPDATED);
+  }
+
+  @MessagePattern(TCP_REQUEST_MESSAGE.INVOICE.GET_BY_ID)
+  async getInvoiceById(@RequestParams() invoiceId: string) {
+    const invoice = await this.invoiceService.getById(invoiceId);
+    if (!invoice) throw new NotFoundException(`Invoice with ${invoiceId} not found in system`);
+    return Response.success<InvoiceTcpResponse>(invoice);
   }
 }
