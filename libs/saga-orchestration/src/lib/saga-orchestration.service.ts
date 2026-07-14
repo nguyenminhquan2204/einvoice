@@ -27,7 +27,7 @@ export class SagaOrchestrationService {
     await this.sagaRepository.updateContext(sagaId, context);
 
     // Update status to RUNNING
-    await this.sagaRepository.updateStatus(sagaId, SAGA_STATUS.PENDING);
+    await this.sagaRepository.updateStatus(sagaId, SAGA_STATUS.RUNNING);
 
     try {
       // Execute steps sequentially

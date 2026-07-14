@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, Logger } from '@nestjs/common';
 import { InvoiceRepository } from '../repositories/invoice.repository';
 import { CreateInvoiceTcpRequest, SendInvoiceTcpRequest } from '@common/interfaces/tcp/invoices';
 import { createCheckoutSessionMapping, invoiceRequestMapping } from '../mappers';
@@ -14,13 +14,21 @@ import { UploadFileTcpRequest } from '@common/interfaces/tcp/media';
 import { PaymentService } from '../../payment/services/payment.service';
 import { KafkaService } from '@common/kafka/kafka.service';
 import { InvoiceSentPayload } from '@common/interfaces/queue/invoice';
+import { InvoiceSendSagaSteps } from '../sagas/invoice-send-saga-steps.service';
+import { InvoiceSendSagaContext } from '@common/interfaces/saga/saga-step.interface';
+import { SagaOrchestrationService } from '@common/saga-orchestration/saga-orchestration.service';
+import { SAGA_TYPE } from '@common/constants/enum/saga.enum';
 
 @Injectable()
 export class InvoiceService {
+  private readonly logger = new Logger(InvoiceService.name);
+
   constructor(
     private readonly invoiceRepository: InvoiceRepository,
     private readonly paymentService: PaymentService,
     private readonly kafkaClient: KafkaService,
+    private readonly sagaSteps: InvoiceSendSagaSteps,
+    private readonly sagaOrchestrator: SagaOrchestrationService,
     @Inject(TCP_SERVICES.PDF_GENERATOR_SERVICE) private readonly pdfGeneratorClient: TcpClient,
     @Inject(TCP_SERVICES.MEDIA_SERVICE) private readonly mediaClient: TcpClient,
   ) {}
@@ -38,23 +46,40 @@ export class InvoiceService {
       throw new BadRequestException(ERROR_CODE.INVOICE_CAN_NOT_BE_SEND);
     }
 
-    const pdfBase64 = await this.generatorInvoicePdf(processId, invoice);
-    const fileUrl = await this.uploadFile(processId, { fileBase64: pdfBase64!, fileName: `invoice-${invoiceId}` });
+    // const pdfBase64 = await this.generatorInvoicePdf(processId, invoice);
+    // const fileUrl = await this.uploadFile(processId, { fileBase64: pdfBase64!, fileName: `invoice-${invoiceId}` });
 
-    const checkoutData = await this.paymentService.createCheckoutSession(createCheckoutSessionMapping(invoice));
-    if (!checkoutData?.url) throw new BadRequestException('Create url payment failed');
+    // const checkoutData = await this.paymentService.createCheckoutSession(createCheckoutSessionMapping(invoice));
+    // if (!checkoutData?.url) throw new BadRequestException('Create url payment failed');
 
-    await this.invoiceRepository.updateById(invoiceId, {
-      status: INVOICE_STATUS.SENT,
-      supervisorId: new ObjectId(userId),
-      fileUrl,
-    });
+    // await this.invoiceRepository.updateById(invoiceId, {
+    //   status: INVOICE_STATUS.SENT,
+    //   supervisorId: new ObjectId(userId),
+    //   fileUrl,
+    // });
 
-    // Kafka
-    this.kafkaClient.emit<InvoiceSentPayload>('invoice-send', {
-      id: invoice.id,
-      paymentLink: checkoutData?.url,
-    });
+    // Execute saga
+    const context: InvoiceSendSagaContext = {
+      sagaId: '',
+      invoiceId,
+      userId,
+      processId,
+    };
+
+    const steps = this.sagaSteps.getSteps(invoice);
+
+    try {
+      await this.sagaOrchestrator.execute(SAGA_TYPE.INVOICE_SEND, steps, context);
+
+      // Kafka
+      this.kafkaClient.emit<InvoiceSentPayload>('invoice-send', {
+        id: invoice.id,
+        paymentLink: context?.paymentLink || '',
+      });
+    } catch (error: any) {
+      this.logger.error(`Failed to send invoice ${invoiceId}: ${error.message}`);
+      throw error;
+    }
   }
 
   generatorInvoicePdf(processId: string, data: Invoice) {
