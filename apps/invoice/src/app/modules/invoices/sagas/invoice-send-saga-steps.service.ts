@@ -177,12 +177,12 @@ export class InvoiceSendSagaSteps {
           }
         },
       },
-      {
-        name: 'DEMO_SAGA',
-        execute: async (context: InvoiceSendSagaContext): Promise<SagaStepResult> => {
-          throw new BadRequestException('Demo saga failure');
-        },
-      },
+      //   {
+      //     name: 'DEMO_SAGA',
+      //     execute: async (context: InvoiceSendSagaContext): Promise<SagaStepResult> => {
+      //       throw new BadRequestException('Demo saga failure');
+      //     },
+      //   },
     ];
   }
 }
