@@ -34,4 +34,5 @@ export interface InvoiceSendSagaContext extends SagaContext {
   fileUrl?: string;
   paymentLink?: string;
   sessionId?: string;
+  filePublicId?: string;
 }

@@ -53,10 +53,10 @@ export class Invoice extends BaseSchema {
   items: Item[];
 
   @Prop({ type: ObjectId, required: false, ref: 'User' })
-  supervisorId?: ObjectId;
+  supervisorId?: ObjectId | null;
 
   @Prop({ type: String, required: false })
-  fileUrl?: string;
+  fileUrl?: string | null;
 }
 
 export const InvoiceSchema = createSchema(Invoice);
