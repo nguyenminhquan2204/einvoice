@@ -18,6 +18,7 @@ import { ThrottlerProvider } from '@common/configuration/throttler.config';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { GrpcProvider, GRPC_SERVICES } from '@common/configuration/grpc.config';
 import { WebhookModule } from './modules/webhook/webhook.module';
+import { HealthModule } from './modules/health/health.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { WebhookModule } from './modules/webhook/webhook.module';
     UserModule,
     AuthorizeModule,
     WebhookModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [
