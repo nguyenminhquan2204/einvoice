@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'nestjs-app'
+    metrics_path: /api/v1/metrics
+    static_configs:
+      - targets:
+          - host.docker.internal:2204
+        labels:
+          app: bff
+
+      - targets:
+          - host.docker.internal:2205
+        labels:
+          app: invoice

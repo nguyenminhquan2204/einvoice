@@ -20,6 +20,7 @@ import { GrpcProvider, GRPC_SERVICES } from '@common/configuration/grpc.config';
 import { WebhookModule } from './modules/webhook/webhook.module';
 import { HealthModule } from './modules/health/health.module';
 import { LoggerModule } from '@common/observability/logger/logger.module';
+import { MetricsModule } from '@common/observability/metrics';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { LoggerModule } from '@common/observability/logger/logger.module';
     LoggerModule.forRoot('bff'),
     RedisProvider,
     ThrottlerProvider,
+    MetricsModule,
     InvoiceModule,
     ProductModule,
     UserModule,
