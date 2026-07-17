@@ -6,9 +6,10 @@ import { CreateProductTcpRequest, ProductTcpResponse } from '@common/interfaces/
 import { Response } from '@common/interfaces/tcp/common/response.interface';
 import { ProductService } from '../services/product.service';
 import { RequestParams } from '@common/decorators/request-param.decorator';
+import { TcpServerTracingInterceptor } from '@common/interceptors/tracing-server.interceptor';
 
 @Controller()
-@UseInterceptors(TcpLoggingInterceptor)
+@UseInterceptors(TcpLoggingInterceptor, TcpServerTracingInterceptor)
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 

@@ -5,8 +5,8 @@ import { WebhookController } from './controllers/webhook.controller';
 import { StripeWebhookService } from './services/stripe-webhook.service';
 
 @Module({
-  imports: [ClientsModule.registerAsync([TcpProvider(TCP_SERVICES.INVOICE_SERVICE)])],
+  imports: [ClientsModule.registerAsync([])],
   controllers: [WebhookController],
-  providers: [StripeWebhookService],
+  providers: [TcpProvider(TCP_SERVICES.INVOICE_SERVICE), StripeWebhookService],
 })
 export class WebhookModule {}

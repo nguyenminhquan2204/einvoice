@@ -5,9 +5,10 @@ import { TcpLoggingInterceptor } from '@common/interceptors/tcpLogging.intercept
 import { UserService } from '../services/user.service';
 import { UserById } from '@common/interfaces/grpc/user-access';
 import { User } from '@common/schemas/user.schema';
+import { TcpServerTracingInterceptor } from '@common/interceptors/tracing-server.interceptor';
 
 @Controller()
-@UseInterceptors(TcpLoggingInterceptor)
+@UseInterceptors(TcpLoggingInterceptor, TcpServerTracingInterceptor)
 export class UserGrpcController {
   constructor(private readonly userService: UserService) {}
 

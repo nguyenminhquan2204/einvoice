@@ -7,9 +7,9 @@ import { MailInvoiceService } from './services/mail-invoice.service';
 import { MailTemplateModule } from '../mail-template/mail-template.module';
 
 @Module({
-  imports: [ClientsModule.registerAsync([TcpProvider(TCP_SERVICES.INVOICE_SERVICE)]), MailTemplateModule],
+  imports: [ClientsModule.registerAsync([]), MailTemplateModule],
   controllers: [MailController],
-  providers: [MailService, MailInvoiceService],
+  providers: [TcpProvider(TCP_SERVICES.INVOICE_SERVICE), MailService, MailInvoiceService],
   exports: [MailService],
 })
 export class MailModule {}

@@ -4,8 +4,8 @@ import { TCP_SERVICES, TcpProvider } from '@common/configuration/tcp.config';
 import { InvoiceController } from './controllers/invoice.controller';
 
 @Module({
-  imports: [ClientsModule.registerAsync([TcpProvider(TCP_SERVICES.INVOICE_SERVICE)])],
+  imports: [ClientsModule.registerAsync([])],
   controllers: [InvoiceController],
-  providers: [],
+  providers: [TcpProvider(TCP_SERVICES.INVOICE_SERVICE)],
 })
 export class InvoiceModule {}

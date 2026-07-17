@@ -9,12 +9,9 @@ import { TCP_SERVICES, TcpProvider } from '@common/configuration/tcp.config';
 import { UserGrpcController } from './controllers/user-grpc.controller';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([UserDestination]),
-    ClientsModule.registerAsync([TcpProvider(TCP_SERVICES.AUTHORIZER_SERVICE)]),
-  ],
+  imports: [MongooseModule.forFeature([UserDestination]), ClientsModule.registerAsync([])],
   controllers: [UserController, UserGrpcController],
   exports: [],
-  providers: [UserService, UserRepository],
+  providers: [TcpProvider(TCP_SERVICES.AUTHORIZER_SERVICE), UserService, UserRepository],
 })
 export class UserModule {}

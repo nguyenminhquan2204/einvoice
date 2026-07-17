@@ -16,16 +16,19 @@ import { SagaOrchestrationModule } from '@common/saga-orchestration/saga-orchest
 @Module({
   imports: [
     MongooseModule.forFeature([InvoiceDestination]),
-    ClientsModule.registerAsync([
-      TcpProvider(TCP_SERVICES.PDF_GENERATOR_SERVICE),
-      TcpProvider(TCP_SERVICES.MEDIA_SERVICE),
-    ]),
+    ClientsModule.registerAsync([]),
     KafkaModule.register(QUEUE_SERVICES.INVOICE),
     SagaOrchestrationModule.forRoot(),
     MongoProvider,
     PaymentModule,
   ],
   controllers: [InvoiceController],
-  providers: [InvoiceService, InvoiceRepository, InvoiceSendSagaSteps],
+  providers: [
+    TcpProvider(TCP_SERVICES.MEDIA_SERVICE),
+    TcpProvider(TCP_SERVICES.PDF_GENERATOR_SERVICE),
+    InvoiceService,
+    InvoiceRepository,
+    InvoiceSendSagaSteps,
+  ],
 })
 export class InvoiceModule {}

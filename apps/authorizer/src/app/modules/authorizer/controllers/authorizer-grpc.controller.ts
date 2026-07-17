@@ -4,9 +4,10 @@ import { GrpcMethod } from '@nestjs/microservices';
 import { VerifyUserTokenRequest, VerifyUserTokenResponse } from '@common/interfaces/grpc/authorizer';
 import { Response } from '@common/interfaces/grpc/common/response.interface';
 import { TcpLoggingInterceptor } from '@common/interceptors/tcpLogging.interceptor';
+import { TcpServerTracingInterceptor } from '@common/interceptors/tracing-server.interceptor';
 
 @Controller()
-@UseInterceptors(TcpLoggingInterceptor)
+@UseInterceptors(TcpLoggingInterceptor, TcpServerTracingInterceptor)
 export class AuthorizerGrpcController {
   constructor(private readonly authorizerService: AuthorizerService) {}
 

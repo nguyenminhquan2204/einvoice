@@ -8,15 +8,9 @@ import { AuthorizerGrpcController } from './controllers/authorizer-grpc.controll
 import { GRPC_SERVICES, GrpcProvider } from '@common/configuration/grpc.config';
 
 @Module({
-  imports: [
-    ClientsModule.registerAsync([
-      TcpProvider(TCP_SERVICES.USER_ACCESS_SERVICE),
-      GrpcProvider(GRPC_SERVICES.USER_ACCESS_SERVICE),
-    ]),
-    KeycloakModule,
-  ],
+  imports: [ClientsModule.registerAsync([GrpcProvider(GRPC_SERVICES.USER_ACCESS_SERVICE)]), KeycloakModule],
   controllers: [AuthorizerController, AuthorizerGrpcController],
   exports: [],
-  providers: [AuthorizerService],
+  providers: [AuthorizerService, TcpProvider(TCP_SERVICES.USER_ACCESS_SERVICE)],
 })
 export class AuthorizerModule {}

@@ -7,9 +7,10 @@ import { UploadFileTcpRequest, UploadFileTcpResponse } from '@common/interfaces/
 import { Response } from '@common/interfaces/tcp/common/response.interface';
 import { MediaService } from '../services/media.service';
 import { HTTP_MESSAGE } from '@common/constants/enum/http-message.enum';
+import { TcpServerTracingInterceptor } from '@common/interceptors/tracing-server.interceptor';
 
 @Controller()
-@UseInterceptors(TcpLoggingInterceptor)
+@UseInterceptors(TcpLoggingInterceptor, TcpServerTracingInterceptor)
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
