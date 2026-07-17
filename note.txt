@@ -1,7 +1,9 @@
 nx lint invoice
 nx test invoice
 nx run invoice:serve
-
+nx test product --coverage
+nx e2e einvoice-e2e
+nx reset & nx run-many -t serve --projects=bff,invoice
 
 -------Library-------------
 01. pnpm add -D husky
@@ -14,6 +16,25 @@ nx run invoice:serve
 08. pnpm add -D @types/express
 09. pnpm add uuid
 10. pnpm add @nestjs/microservices
+11. pnpm add @nestjs/throttler
+12. pnpm add @nest-lab/throttler-storage-redis
+13. pnpm add @grpc/grpc-js @grpc/proto-loader
+14. pnpm add puppeteer
+15. pnpm add ejs
+16. pnpm add -D @types/ejs
+17. npx puppeteer browsers install chrome
+18. pnpm add cloudinary
+19. pnpm add streamifier
+20. pnpm add -D @types/streamifier
+21. pnpm add stripe
+22. pnpm add kafkajs
+23. pnpm add nodemailer
+24. pnpm add -D @types/nodemailer
+25. pnpm add -D @testcontainers/postgresql
+26. pnpm add @nestjs/terminus
+27. pnpm add nestjs-pino pino pino-http pino-pretty pino-loki
+28. pnpm add @willsoto/nestjs-prometheus prom-client
+
 ---------------------------
 
 ------Husky, Lint-Staged, Commit Lint---------------
@@ -28,5 +49,20 @@ lsof -nP -iTCP:2204 -sTCP:LISTEN
 kill -9 $(lsof -t -iTCP:2204 -sTCP:LISTEN)
 
 
------Note-------
- 
+-----Install Stripe-------
+1. brew install stripe/stripe-cli/stripe
+2. stripe login
+3. stripe listen --forward-to localhost:2204/api/v1/webhook/stripe
+4. stripe trigger
+
+----Config kafka----------
+1. kafka-topics.sh --create --topic demo-topic-1 --bootstrap-server localhost:9092
+2. kafka-topics.sh --list --bootstrap-server localhost:9092
+
+------Draft----------------
+1. "dev-lite": "pnpm dev --projects=bff,user-access,authorizer,invoice,pdf-generator,media,mail"
+2. prometheus
+3. Open Telemetry
+4. Grafana Tempo
+5. pnpm docker:start:local pdf-generator
+
